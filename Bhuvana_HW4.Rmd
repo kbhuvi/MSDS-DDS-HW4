@@ -1,0 +1,50 @@
+---
+title: "R - HW 4"
+author: "Bhuvana A K"
+date: "June 7, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+#### FiveThirtyEight
+<http://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/>
+
+```{r college_recent_grads}
+library(fivethirtyeight)
+#data(package = "fivethirtyeight")
+#vignette("fivethirtyeight", package = "fivethirtyeight")
+
+df <- college_recent_grads
+head(df,3)
+dim(df)
+colnames(df)
+```
+
+#### Data Summary
+```{r dataSummary}
+ncol(df)
+library(plyr)
+major_count <- count(df,"major_category")
+library("RColorBrewer")
+colors <- brewer.pal(n = 11, name = "Spectral")
+barChart <- major_count$freq
+abbr <- c(substr(c(major_count[,1]), start=1, stop=5))
+catMat <- data.frame(Abbr= abbr,Values =c(major_count[,1]))
+leg <- c(paste(catMat$Abbr,"-",catMat$Values))
+par(las=2)
+barplot(barChart,width=3,space =3,col=colors,horiz="True",names.arg = catMat$Abbr,main="The Economic Guide To Picking A College Major",sub="Count of Majors each Category contains",xlab="Number Of Majors",ylab="Category", axes="T",axis.lty=10,font.lab=2,family="serif",axisnames = TRUE,xlim = c(0,30))
+legend("topright",legend=leg,cex=0.50,ncol=2)
+write.csv(df, file = "CollegeMajor.csv",row.names=FALSE)
+
+```
+#### GIT HUB Repo
+<https://github.com/kbhuvi/MSDS-DDS-HW4>
